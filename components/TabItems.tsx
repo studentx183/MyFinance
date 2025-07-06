@@ -1,3 +1,4 @@
+import { COLORS } from "@/app/styles/colors";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -58,10 +59,10 @@ export default TabItems;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#f1f1f1",
+    backgroundColor: COLORS.background,
     marginHorizontal: 16,
     marginVertical: 8,
-    borderColor: "#ddd",
+    borderColor: COLORS.border,
     borderWidth: 1,
     borderRadius: 14,
   },
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 1,
   },
   selectedItem: {
-    backgroundColor: "#007AFF",
+    backgroundColor: COLORS.primary,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#666",
+    color: COLORS.text,
   },
   selectedItemText: {
     color: "#fff",

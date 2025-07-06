@@ -1,13 +1,13 @@
-import { HistoryItemModel } from "@/types/history-item-model";
+import { TransactionModel } from "@/types/transaction-model";
+import { formatAmount } from "@/utils/formatAmount";
 import { StyleSheet, Text, View } from "react-native";
-import { Type } from "./constants/type";
 
-const HistoryItem: React.FC<{ item: HistoryItemModel }> = ({ item }) => {
+const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.itemText}>
-        {" "}
-        {item.typeId === Type.EXPENSE ? "-" : "+"} {item.amount} {item.for}
+        {formatAmount(item.amount, item.typeId)}
+        {item.for && ":"} {item.for}
       </Text>
     </View>
   );
