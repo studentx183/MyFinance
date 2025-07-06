@@ -1,12 +1,10 @@
-import AnimatedView from "@/components/AnimatedView";
-import History from "@/components/History";
-import NumInput from "@/components/NumInput";
+import CreateTransaction from "@/components/CreateTransaction";
 import TabItems from "@/components/TabItems";
+import History from "@/components/TransactionHistory";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function Index() {
-  const [amount, setAmount] = useState<number | null>(null);
   const [selectedTab, setSelectedTab] = useState(2);
 
   const tabItems = [
@@ -25,9 +23,7 @@ export default function Index() {
 
         <History typeId={selectedTab} />
 
-        <AnimatedView>
-          <NumInput onValueChange={setAmount} />
-        </AnimatedView>
+        <CreateTransaction typeId={selectedTab} />
       </View>
     </View>
   );

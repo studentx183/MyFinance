@@ -1,12 +1,20 @@
+import { mainStyles } from "@/app/styles/global";
 import { useState } from "react";
-import { DimensionValue, StyleSheet, TextInput } from "react-native";
+import { DimensionValue, TextInput } from "react-native";
 
 interface NumInputProps {
   width?: DimensionValue;
   onValueChange: (value: number | null) => void;
+  onSubmit?: (value: number) => void;
+  placeholder?: string;
 }
 
-const NumInput: React.FC<NumInputProps> = ({ onValueChange, width }) => {
+const NumInput: React.FC<NumInputProps> = ({
+  onValueChange,
+  onSubmit,
+  width,
+  placeholder,
+}) => {
   const [num, setNum] = useState<string>("");
 
   const handleNumChange = (value: string) => {
@@ -16,26 +24,24 @@ const NumInput: React.FC<NumInputProps> = ({ onValueChange, width }) => {
     onValueChange(parsedValue || null);
   };
 
+  const handleSubmit = () => {
+    const parsedValue = num ? parseInt(num, 10) : 0;
+    if (parsedValue > 0 && onSubmit) {
+      onSubmit(parsedValue);
+    }
+  };
+
   return (
     <TextInput
-      style={[styles.input, { width: width || "100%" }]}
+      style={[mainStyles.input, { width: width || "100%" }]}
       value={num}
       keyboardType="numeric"
-      placeholder="Enter value"
+      placeholder={placeholder || "Enter amount"}
       onChangeText={handleNumChange}
+      onSubmitEditing={handleSubmit}
+      returnKeyType="done"
     />
   );
 };
 
 export default NumInput;
-
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderStyle: "solid",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
-  },
-});

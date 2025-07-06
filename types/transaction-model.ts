@@ -1,5 +1,5 @@
-export interface HistoryItemModel {
-  id: number;
+export interface TransactionModel {
+  id: string;
   typeId: number;
   amount: number;
   createdAt: Date;
