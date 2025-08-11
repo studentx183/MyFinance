@@ -1,26 +1,34 @@
+import { COLORS } from "@/app/styles/colors";
 import TransactionItem from "@/components/TransactionItem";
-import { fetchHistory } from "@/services/transaction";
-import { Result } from "@/types/api";
+import { useTransactions } from "@/contexts/TransactionContext";
 import { TransactionModel } from "@/types/transaction-model";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { useEffect, useRef } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const AnimatedTransactionItem: React.FC<{
   item: TransactionModel;
   index: number;
-}> = ({ item, index }) => {
+  isLast: boolean;
+}> = ({ item, index, isLast }) => {
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(20);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     transform: [{ translateY: translateY.value }],
+    ...(isLast
+      ? {}
+      : {
+          borderBottomColor: COLORS.border,
+          borderBottomWidth: 1,
+        }),
   }));
 
   useEffect(() => {
@@ -37,42 +45,50 @@ const AnimatedTransactionItem: React.FC<{
 };
 
 const History: React.FC<{ typeId: number }> = ({ typeId }) => {
-  const [data, setData] = useState<TransactionModel[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const filteredData = data.filter((item) => item.typeId === typeId);
+  const { getTransactionsByType, error } = useTransactions();
+  const filteredData = getTransactionsByType(typeId);
+  const FlatListRef = useRef<FlatList<TransactionModel>>(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      const result: Result<TransactionModel[]> = await fetchHistory();
-
-      if (result.success) {
-        setData(result.data);
-      } else {
-        setError(result.error);
-      }
-
-      setIsLoading(false);
-    };
-
-    loadData();
-  }, []);
-
-  if (error) {
-    // You can render an error component here
-    console.log("Error loading transactions:", error);
-  }
+    if (FlatListRef.current) {
+      setTimeout(
+        () => FlatListRef.current!.scrollToEnd({ animated: true }),
+        100
+      );
+    }
+  }, [filteredData]);
 
   return (
-    <View>
-      {filteredData.map((item, index) => (
-        <AnimatedTransactionItem key={item.id} item={item} index={index} />
-      ))}
-    </View>
+    <SafeAreaProvider style={styles.container}>
+      <SafeAreaView style={styles.content}>
+        <FlatList
+          ref={FlatListRef}
+          data={filteredData}
+          renderItem={({ item, index }) => (
+            <AnimatedTransactionItem
+              item={item}
+              index={index}
+              isLast={index === filteredData.length - 1}
+            />
+          )}
+        ></FlatList>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
 export default History;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  content: {
+    flex: 1,
+    overflowY: "auto",
+    borderStyle: "solid",
+    shadowColor: COLORS.black,
+    borderRadius: 8,
+  },
+});

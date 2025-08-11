@@ -1,9 +1,9 @@
 import { COLORS } from "@/app/styles/colors";
 import { mainStyles } from "@/app/styles/global";
-import IconBtn from "@/components/IconBtn";
-import NumInput from "@/components/NumInput";
 import ArrowIcon from "@/components/icons/Arrow";
-import { createTransaction } from "@/services/transaction";
+import IconBtn from "@/components/ui/IconBtn";
+import NumInput from "@/components/ui/NumInput";
+import { useTransactions } from "@/contexts/TransactionContext";
 import { TransactionModel } from "@/types/transaction-model";
 import { formatAmount } from "@/utils/formatAmount";
 import { uuidv4 } from "@/utils/uuidV4";
@@ -17,13 +17,15 @@ import Animated, {
   SlideOutLeft,
   SlideOutRight,
 } from "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
 const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
   const [amount, setAmount] = useState<number | null>(null);
   const [forWhat, setForWhat] = useState<string>("");
   const [showTextInput, setShowTextInput] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [id, setNewId] = useState(uuidv4());
+
+  const { addTransaction, isLoading } = useTransactions();
 
   const handleAmountSubmit = (value: number) => {
     setAmount(value);
@@ -31,26 +33,33 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
   };
 
   const handleSubmit = async () => {
-    try {
-      setIsSubmitting(true);
-      const transaction = {
-        id,
-        typeId,
-        amount: amount,
-        for: forWhat,
-        createdAt: new Date(),
-      } as TransactionModel;
-      const res = await createTransaction(transaction);
-      if (res.success) {
-        setAmount(null);
-        setForWhat("");
-        setShowTextInput(false);
-        setNewId(uuidv4());
-      }
-    } catch (error) {
-      console.error("Failed to create transaction:", error);
-    } finally {
-      setIsSubmitting(false);
+    if (!amount || amount <= 0) return;
+
+    const transaction: TransactionModel = {
+      id,
+      typeId,
+      amount,
+      for: forWhat,
+      createdAt: new Date(),
+    };
+
+    const success = await addTransaction(transaction);
+
+    if (success) {
+      // Reset form
+      setAmount(null);
+      setForWhat("");
+      setShowTextInput(false);
+      setNewId(uuidv4());
+      Toast.show({
+        type: "success",
+        text1: "Transaction added ✅",
+      });
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Failed to add transaction ❌",
+      });
     }
   };
 
@@ -67,7 +76,7 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
           style={styles.amountPreview}
         >
           <Text style={styles.amountText}>
-            {formatAmount(amount || 0, typeId)}
+            {formatAmount(amount || 0, typeId)} {forWhat && ": " + forWhat}
           </Text>
         </Animated.View>
       )}
@@ -95,12 +104,12 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
             style={styles.inputContainer}
           >
             <TextInput
-              style={{ ...mainStyles.input, ...styles.textInput }}
+              style={[mainStyles.input, styles.textInput]}
               placeholder="Optional: For what?"
               onChangeText={setForWhat}
               onSubmitEditing={handleSubmit}
               returnKeyType="done"
-              editable={!isSubmitting}
+              editable={!isLoading}
               value={forWhat}
             />
             <View style={styles.submitBtn}>
@@ -108,7 +117,7 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
                 size={38}
                 icon={ArrowIcon}
                 iconColor={COLORS.white}
-                loading={isSubmitting}
+                loading={isLoading}
                 onPress={handleSubmit}
               />
             </View>
@@ -132,7 +141,10 @@ const styles = StyleSheet.create({
   amountText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: COLORS.text,
+    color: COLORS.black,
+    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
   inputRow: {
     flexDirection: "row",
@@ -147,12 +159,11 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   textInput: {
-    margin: 0,
-    width: "95%",
+    flex: 1,
+    marginBottom: 0,
   },
   submitBtn: {
-    width: "5%",
-    alignItems: "flex-end",
+    width: "10%",
   },
 });
 

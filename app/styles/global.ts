@@ -6,8 +6,7 @@ export const mainStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderStyle: "solid",
-    borderRadius: 5,
+    borderRadius: 16,
     padding: 10,
-    marginBottom: 20,
   },
 });

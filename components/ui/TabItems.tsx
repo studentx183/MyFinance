@@ -62,9 +62,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     marginHorizontal: 16,
     marginVertical: 8,
+    marginBottom: 20,
     borderColor: COLORS.border,
     borderWidth: 1,
-    borderRadius: 14,
+    borderRadius: 32,
+    padding: 4,
   },
   item: {
     flex: 1,
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 14,
+    borderRadius: 32,
     marginHorizontal: 1,
   },
   selectedItem: {

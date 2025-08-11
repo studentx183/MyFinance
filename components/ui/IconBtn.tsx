@@ -1,11 +1,11 @@
 import { COLORS } from "@/app/styles/colors";
 import { ActivityIndicator, Pressable, StyleSheet } from "react-native";
 import Animated, {
-    ZoomIn,
-    ZoomOut,
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
+  ZoomIn,
+  ZoomOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
 
 const IconBtn: React.FC<{

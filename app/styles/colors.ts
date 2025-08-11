@@ -4,6 +4,10 @@ export const COLORS = {
   border: "#ddd",
   text: "#666",
   textSelected: "#fff",
-  shadow: "#000",
+  black: "#000",
   white: "#fff",
+  secondaryText: "#999",
+  danger: "#ff3b30",
+  success: "#28a745",
+  warning: "#ffcc00",
 };
