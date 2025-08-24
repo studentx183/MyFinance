@@ -1,13 +1,15 @@
 import { COLORS } from "@/app/styles/colors";
 import { TransactionModel } from "@/types/transaction-model";
 import { formatAmount } from "@/utils/formatAmount";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import UpdateTransaction from "./UpdateTransaction";
 
 const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
   const swipeableRef = useRef<Swipeable>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
 
   const formatDate = (date: Date | string) => {
     const dateObj = new Date(date);
@@ -38,9 +40,7 @@ const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
   };
 
   const handleEdit = () => {
-    // Add your edit logic here
-    console.log("Edit item:", item.id);
-    // Close swipeable after action
+    setIsUpdateModalOpen(true);
     swipeableRef.current?.close();
   };
 
@@ -60,33 +60,40 @@ const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
   );
 
   return (
-    <GestureHandlerRootView style={styles.gestureRoot}>
-      <Swipeable
-        ref={swipeableRef}
-        renderRightActions={renderRightActions}
-        rightThreshold={40}
-        friction={2}
-        overshootRight={false}
-        enableTrackpadTwoFingerGesture
-      >
-        <Pressable
-          style={({ pressed }) => [
-            getPressedStyle({ pressed }),
-            styles.container,
-          ]}
-          onPress={() => {}}
+    <>
+      <GestureHandlerRootView style={styles.gestureRoot}>
+        <Swipeable
+          ref={swipeableRef}
+          renderRightActions={renderRightActions}
+          rightThreshold={40}
+          friction={2}
+          overshootRight={false}
+          enableTrackpadTwoFingerGesture
         >
-          <View style={styles.itemContainer}>
-            <Text style={styles.amountText}>
-              {formatAmount(item.amount, item.typeId)}
-            </Text>
-            <Text style={styles.itemText}>{item.for}</Text>
-            {/* {item.for && ":"} {item.for} */}
-          </View>
-          <Text style={styles.dateText}> {formatDate(item.createdAt)} </Text>
-        </Pressable>
-      </Swipeable>
-    </GestureHandlerRootView>
+          <Pressable
+            style={({ pressed }) => [
+              getPressedStyle({ pressed }),
+              styles.container,
+            ]}
+            onPress={() => {}}
+          >
+            <View style={styles.itemContainer}>
+              <Text style={styles.amountText}>
+                {formatAmount(item.amount, item.typeId)}
+              </Text>
+              <Text style={styles.itemText}>{item.for}</Text>
+              {/* {item.for && ":"} {item.for} */}
+            </View>
+            <Text style={styles.dateText}> {formatDate(item.createdAt)} </Text>
+          </Pressable>
+        </Swipeable>
+      </GestureHandlerRootView>
+      <UpdateTransaction
+        item={item}
+        visible={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+      />
+    </>
   );
 };
 
@@ -107,16 +114,16 @@ const styles = StyleSheet.create({
   },
   amountText: {
     fontSize: 16,
-    color: "#333",
+    color: COLORS.text,
     fontWeight: "600",
   },
   itemText: {
     fontSize: 14,
-    color: COLORS.text,
+    color: COLORS.textSecondary,
   },
   dateText: {
     marginTop: 4,
-    color: COLORS.secondaryText,
+    color: COLORS.textTertiary,
   },
   actionsContainer: {
     flexDirection: "row",

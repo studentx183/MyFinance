@@ -1,15 +1,14 @@
 import CreateTransaction from "@/components/CreateTransaction";
 import TransactionHistory from "@/components/TransactionHistory";
 import TabItems from "@/components/ui/TabItems";
-import toastConfig from "@/configs/toast-config";
 import { BlurView } from "expo-blur";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Toast from "react-native-toast-message";
 import { COLORS } from "./styles/colors";
+import { BORDER_RADIUS, Z_INDEX } from "./styles/tokens";
 
 export default function Index() {
-  const [selectedTab, setSelectedTab] = useState(2);
+  const [selectedTab, setSelectedTab] = useState<number>(2);
 
   const tabItems = [
     { id: 1, name: "Income" },
@@ -36,12 +35,6 @@ export default function Index() {
         />
       </BlurView>
 
-      <Toast
-        config={toastConfig}
-        position="top"
-        topOffset={100}
-        visibilityTime={3000}
-      />
     </View>
   );
 }
@@ -62,10 +55,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 19 },
     shadowOpacity: 0.3,
     shadowRadius: 38,
-    elevation: 15,
-    borderRadius: 10,
+    elevation: Z_INDEX.modal,
+    borderRadius: BORDER_RADIUS.sm,
     overflow: "hidden", // Important for blur borders
-    zIndex: 10, // Ensure it's on top
+    zIndex: Z_INDEX.overlay, // Ensure it's on top
   },
   listContainer: {
     flex: 1,

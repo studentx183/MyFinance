@@ -1,4 +1,5 @@
 import { COLORS } from "@/app/styles/colors";
+import { BORDER_RADIUS } from "@/app/styles/tokens";
 import { ActivityIndicator, Pressable, StyleSheet } from "react-native";
 import Animated, {
   ZoomIn,
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 0,
     display: "flex",
-    borderRadius: 50,
+    borderRadius: BORDER_RADIUS.full,
     padding: 5,
     alignItems: "center",
     justifyContent: "center",

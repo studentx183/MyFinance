@@ -1,3 +1,4 @@
+// components/
 import { COLORS } from "@/app/styles/colors";
 import { mainStyles } from "@/app/styles/global";
 import ArrowIcon from "@/components/icons/Arrow";
@@ -25,7 +26,7 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
   const [showTextInput, setShowTextInput] = useState(false);
   const [id, setNewId] = useState(uuidv4());
 
-  const { addTransaction, isLoading } = useTransactions();
+  const { createTransaction, isLoading } = useTransactions();
 
   const handleAmountSubmit = (value: number) => {
     setAmount(value);
@@ -43,9 +44,9 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
       createdAt: new Date(),
     };
 
-    const success = await addTransaction(transaction);
+    const res = await createTransaction(transaction);
 
-    if (success) {
+    if (res.success) {
       // Reset form
       setAmount(null);
       setForWhat("");
@@ -53,12 +54,7 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
       setNewId(uuidv4());
       Toast.show({
         type: "success",
-        text1: "Transaction added ✅",
-      });
-    } else {
-      Toast.show({
-        type: "error",
-        text1: "Failed to add transaction ❌",
+        text1: "Transaction added!",
       });
     }
   };
@@ -90,6 +86,7 @@ const CreateTransaction: React.FC<{ typeId: number }> = ({ typeId }) => {
             entering={SlideInLeft.duration(300)}
           >
             <NumInput
+              value={amount}
               onValueChange={setAmount}
               onSubmit={handleAmountSubmit}
               placeholder="How much?"
@@ -142,7 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: COLORS.black,
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowColor: COLORS.textShadow,
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 1,
   },

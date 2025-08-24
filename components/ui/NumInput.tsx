@@ -3,29 +3,34 @@ import { useState } from "react";
 import { DimensionValue, TextInput } from "react-native";
 
 interface NumInputProps {
+  value?: number | null;
   width?: DimensionValue;
+  placeholder?: string;
   onValueChange: (value: number | null) => void;
   onSubmit?: (value: number) => void;
-  placeholder?: string;
+  required?: boolean;
 }
 
 const NumInput: React.FC<NumInputProps> = ({
   onValueChange,
   onSubmit,
+  value,
   width,
   placeholder,
+  required,
 }) => {
-  const [num, setNum] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>(value?.toString() || "");
 
   const handleNumChange = (value: string) => {
     const formattedValue = value.replace(/[^0-9]/g, "");
     const parsedValue = formattedValue ? parseInt(formattedValue, 10) : "";
-    setNum(parsedValue.toString());
+    setInputValue(parsedValue.toString());
     onValueChange(parsedValue || null);
   };
 
   const handleSubmit = () => {
-    const parsedValue = num ? parseInt(num, 10) : 0;
+    // for submitting by pressing the return key
+    const parsedValue = inputValue ? parseInt(inputValue, 10) : 0;
     if (parsedValue > 0 && onSubmit) {
       onSubmit(parsedValue);
     }
@@ -34,7 +39,7 @@ const NumInput: React.FC<NumInputProps> = ({
   return (
     <TextInput
       style={[mainStyles.input, { width: width || "100%" }]}
-      value={num}
+      value={inputValue}
       keyboardType="numeric"
       placeholder={placeholder || "Enter amount"}
       onChangeText={handleNumChange}

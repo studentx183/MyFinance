@@ -1,4 +1,5 @@
 import { COLORS } from "@/app/styles/colors";
+import { BORDER_RADIUS, Z_INDEX } from "@/app/styles/tokens";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderColor: COLORS.border,
     borderWidth: 1,
-    borderRadius: 32,
+    borderRadius: BORDER_RADIUS.xxl,
     padding: 4,
   },
   item: {
@@ -74,19 +75,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 32,
+    borderRadius: BORDER_RADIUS.xxl,
     marginHorizontal: 1,
   },
   selectedItem: {
     backgroundColor: COLORS.primary,
-    shadowColor: "#000",
+    shadowColor: COLORS.shadow,
     shadowOffset: {
       width: 0,
       height: 1,
     },
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: Z_INDEX.low,
   },
   firstItem: {
     marginLeft: 0,
@@ -97,10 +98,10 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     fontWeight: "500",
-    color: COLORS.text,
+    color: COLORS.textSecondary,
   },
   selectedItemText: {
-    color: "#fff",
+    color: COLORS.textSelected,
     fontWeight: "600",
   },
 });

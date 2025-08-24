@@ -1,4 +1,5 @@
 import { COLORS } from "@/app/styles/colors";
+import { BORDER_RADIUS } from "@/app/styles/tokens";
 import TransactionItem from "@/components/TransactionItem";
 import { useTransactions } from "@/contexts/TransactionContext";
 import { TransactionModel } from "@/types/transaction-model";
@@ -89,6 +90,6 @@ const styles = StyleSheet.create({
     overflowY: "auto",
     borderStyle: "solid",
     shadowColor: COLORS.black,
-    borderRadius: 8,
+    borderRadius: BORDER_RADIUS.xs,
   },
 });

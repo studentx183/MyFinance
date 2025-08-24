@@ -12,7 +12,7 @@ const handleApiError = (error: AxiosError): string => {
     const status = error.response.status;
     const responseData = error.response.data as any;
     const message = responseData?.message || error.message;
-    
+
     switch (status) {
       case 400:
         return `Bad Request: ${message}`;
@@ -54,11 +54,20 @@ export const apiRequest = async <T>(
 export const apiGet = <T>(url: string): Promise<Result<T>> =>
   apiRequest(() => api.get<T>(url));
 
-export const apiPost = <T>(url: string, data?: any): Promise<Result<T>> =>
-  apiRequest(() => api.post<T>(url, data));
+export const apiPost = <T, dataType>(
+  url: string,
+  data?: dataType
+): Promise<Result<T>> => apiRequest(() => api.post<T>(url, data));
 
-export const apiPut = <T>(url: string, data?: any): Promise<Result<T>> =>
-  apiRequest(() => api.put<T>(url, data));
+export const apiPut = <T, dataType>(
+  url: string,
+  data?: dataType
+): Promise<Result<T>> => apiRequest(() => api.put<T>(url, data));
+
+export const apiPatch = <T, dataType>(
+  url: string,
+  data?: Partial<dataType>
+): Promise<Result<T>> => apiRequest(() => api.patch<T>(url, data));
 
 export const apiDelete = <T>(url: string): Promise<Result<T>> =>
   apiRequest(() => api.delete<T>(url));

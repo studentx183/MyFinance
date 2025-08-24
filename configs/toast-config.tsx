@@ -1,3 +1,5 @@
+import { COLORS } from "@/app/styles/colors";
+import { BORDER_RADIUS } from "@/app/styles/tokens";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { BaseToastProps } from "react-native-toast-message";
@@ -38,27 +40,27 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 52,
     padding: 12,
-    borderRadius: 8,
+    borderRadius: BORDER_RADIUS.xs,
   },
   errorContainer: {
-    borderColor: "#D92D20",
-    backgroundColor: "#FEF3F2",
+    borderColor: COLORS.dangerBorder,
+    backgroundColor: COLORS.dangerLight,
   },
   successContainer: {
-    borderColor: "#ABEFC6",
-    backgroundColor: "#ECFDF3",
+    borderColor: COLORS.successBorder,
+    backgroundColor: COLORS.successLight,
   },
   text1Error: {
-    color: "#D92D20",
+    color: COLORS.dangerBorder,
     fontSize: 12,
     fontWeight: "600",
   },
   text1Success: {
-    color: "#067647",
+    color: COLORS.successText,
     fontSize: 12,
     fontWeight: "600",
   },
   text2: {
-    color: "white",
+    color: COLORS.white,
   },
 });
