@@ -72,7 +72,8 @@ const History: React.FC<{ typeId: number }> = ({ typeId }) => {
               isLast={index === filteredData.length - 1}
             />
           )}
-        ></FlatList>
+          contentContainerStyle={styles.listContent}
+        />
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -91,5 +92,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     shadowColor: COLORS.black,
     borderRadius: BORDER_RADIUS.xs,
+  },
+  listContent: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
 });

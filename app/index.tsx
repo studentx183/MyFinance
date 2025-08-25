@@ -22,9 +22,13 @@ export default function Index() {
         <TransactionHistory typeId={selectedTab} />
       </View>
 
-      <View style={styles.inputWrapper}>
+      <BlurView
+        intensity={20}
+        tint="light"
+        style={styles.inputWrapper}
+      >
         <CreateTransaction typeId={selectedTab} />
-      </View>
+      </BlurView>
 
       {/* TabWrapper as BlurView - rendered AFTER FlatList */}
       <BlurView intensity={20} tint="light" style={styles.tabWrapperBlur}>
@@ -34,7 +38,6 @@ export default function Index() {
           initialSelectedId={selectedTab}
         />
       </BlurView>
-
     </View>
   );
 }

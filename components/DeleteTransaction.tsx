@@ -1,3 +1,4 @@
+import { Type } from "@/constants/type";
 import { useTransactions } from "@/contexts/TransactionContext";
 import React from "react";
 import { StyleSheet, Text } from "react-native";
@@ -18,6 +19,7 @@ const DeleteTransaction: React.FC<DeleteTransactionProps> = ({
   onClose,
 }) => {
   const { deleteTransaction, isLoading } = useTransactions();
+  const modalName = Type.EXPENSE ? "Delete Expense" : "Delete Income";
 
   const handleDelete = async () => {
     const res = await deleteTransaction(itemId);
@@ -35,7 +37,7 @@ const DeleteTransaction: React.FC<DeleteTransactionProps> = ({
   };
 
   return (
-    <Modal visible={visible} onClose={handleClose} title="Delete Expense">
+    <Modal visible={visible} onClose={handleClose} title={modalName}>
       <Animated.View entering={FadeInUp}>
         <Text>Are you sure you want to delete this transaction?</Text>
       </Animated.View>

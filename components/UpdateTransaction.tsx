@@ -1,4 +1,5 @@
 import { mainStyles } from "@/app/styles/global";
+import { Type } from "@/constants/type";
 import { useTransactions } from "@/contexts/TransactionContext";
 import { TransactionModel } from "@/types/transaction-model";
 import React, { useState } from "react";
@@ -25,6 +26,8 @@ const UpdateTransaction: React.FC<UpdateTransactionProps> = ({
   const [newAmount, setNewAmount] = useState<number | null>(amount || null);
   const [newForWhat, setNewForWhat] = useState<string>(forWhat || "");
   const [newCreatedDate, setNewCreatedDate] = useState<Date>(createdAt);
+  const modalName =
+    item.typeId === Type.EXPENSE ? "Edit Expense" : "Edit Income";
 
   const { updateTransaction, isLoading } = useTransactions();
 
@@ -49,7 +52,7 @@ const UpdateTransaction: React.FC<UpdateTransactionProps> = ({
   };
 
   return (
-    <Modal visible={visible} onClose={handleClose} title="Edit Expense">
+    <Modal visible={visible} onClose={handleClose} title={modalName}>
       <Animated.View entering={FadeInUp}>
         <NumInput value={newAmount} onValueChange={setNewAmount} />
       </Animated.View>

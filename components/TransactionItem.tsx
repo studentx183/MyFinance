@@ -5,11 +5,13 @@ import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import DeleteTransaction from "./DeleteTransaction";
 import UpdateTransaction from "./UpdateTransaction";
 
 const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
   const swipeableRef = useRef<Swipeable>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
   const formatDate = (date: Date | string) => {
     const dateObj = new Date(date);
@@ -33,9 +35,7 @@ const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
   };
 
   const handleDelete = () => {
-    // Add your delete logic here
-    console.log("Delete item:", item.id);
-    // Close swipeable after action
+    setIsDeleteModalOpen(true);
     swipeableRef.current?.close();
   };
 
@@ -88,10 +88,16 @@ const HistoryItem: React.FC<{ item: TransactionModel }> = ({ item }) => {
           </Pressable>
         </Swipeable>
       </GestureHandlerRootView>
+
       <UpdateTransaction
         item={item}
         visible={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
+      />
+      <DeleteTransaction
+        itemId={item.id}
+        visible={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
       />
     </>
   );
